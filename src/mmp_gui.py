@@ -2,7 +2,7 @@
 
 #import tkinter
 from tkinter import * 
-import main
+import mmp_main
 
 class Gui():
 

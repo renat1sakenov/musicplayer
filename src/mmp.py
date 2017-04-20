@@ -1,7 +1,6 @@
-#!/usr/bin/env python2
-
 import mmp_main
 import mmp_artist
+import mmp_album
 
 import os
 import fnmatch
@@ -12,10 +11,20 @@ class MMP():
     def __init__(self):
 
         self.artists = []
-        self.albums = []
 
         self.read_paths()
         self.load_music()
+
+        ''' 
+        TEST
+        for a in self.artists:
+            print(a.name)
+            for b in a.albums:
+                print(b.name)
+                for s in b.songs:
+                    print(s)
+        '''
+        self.music_files = [] #no need for them
 
     def read_paths(self):
         f = open(mmp_main.PATH_FILE,"a+")
@@ -24,7 +33,7 @@ class MMP():
         f.close()
 
         #test
-        self.paths = ['/run/media/renat/My Passport/MUSIK/3LT/']
+        self.paths = ['/run/media/renat/My Passport/MUSIK/The Beatles/']
 
     def write_path(self):
         pass
@@ -32,6 +41,9 @@ class MMP():
     def delete_path(self):
         pass
 
+    '''
+    reading music files from directories into artists -> albums -> songs
+    '''
     def load_music(self):
         #reading all music file in.
         self.music_files = []
@@ -43,28 +55,28 @@ class MMP():
         for file_p in self.music_files:
             mfile = eyed3.load(file_p)
             str_artist = mfile.tag.artist
-            if not artist_already_there(str_artist):
+            if self.get_artist(str_artist) == None:
                 artist = mmp_artist.Artist(str_artist)
                 self.artists.append(artist)
 
         #creating albums
         for file_p in self.music_files:
             mfile = eyed3.load(file_p)
+            str_artist = mfile.tag.artist
             str_album = mfile.tag.album
-            if not album_already_there(str_album):
+            if self.get_album(str_artist,str_album) == None:
                 album = mmp_album.Album(str_album)
-                #add to artist
-            album.add_song(file_p)
+                self.get_artist(mfile.tag.artist).albums.append(album)
+            album.songs.append(file_p)
 
-
-    def artist_already_there(str_artist):
+    def get_artist(self,str_artist):
         for artist in self.artists:
             if artist.name == str_artist:
-                return True
-        return False
+                return artist
+        return None
 
-    def album_already_there(str_album):
-        for album in self.albums:
+    def get_album(self,str_artist,str_album):
+        for album in self.get_artist(str_artist).albums:
             if album.name == str_album:
-                return True
-        return False
+                return album
+        return None

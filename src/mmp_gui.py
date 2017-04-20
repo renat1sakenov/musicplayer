@@ -21,8 +21,15 @@ class Gui():
         self.window.config(menu=self.menubar)
         self.window.mainloop()
 
-    def add_music():
+
+
+    def display(self,artists):
+        print("displaying music")
+
+
+
+    def add_music(self):
         pass
 
-    def options():
+    def options(self):
         pass

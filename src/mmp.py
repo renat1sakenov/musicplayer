@@ -80,3 +80,6 @@ class MMP():
             if album.name == str_album:
                 return album
         return None
+
+    def get_image(self,artist,album):
+        print("get_image")

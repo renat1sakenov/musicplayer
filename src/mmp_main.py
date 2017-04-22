@@ -5,16 +5,21 @@ import mmp
 
 PATH_FILE = "./mymusic"
 
-def main():
-    gui  = mmp_gui.Gui()
-    mmp_o =  mmp.MMP()
-    gui.display(mmp_o.artists)
+
+class Main():
+
+    def __init__(self):
+        self.mmp_o =  mmp.MMP(self)
+        self.gui  = mmp_gui.Gui(self)
+        self.gui.display(self.mmp_o.artists)
 
 
-def get_image(artist,album):
-    mmp_o.get_image(artist,album)
+    def get_image(self,album):
+        return self.mmp_o.get_image(album)
+
+
 
 if __name__ == "__main__":
-    main()
+    Main()
 
 

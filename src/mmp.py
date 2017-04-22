@@ -8,9 +8,11 @@ import eyed3
 
 class MMP():
 
-    def __init__(self):
+    def __init__(self,main):
 
+        self.main = main
         self.artists = []
+        eyed3.log.setLevel("ERROR")
 
         self.read_paths()
         self.load_music()
@@ -33,7 +35,7 @@ class MMP():
         f.close()
 
         #test
-        self.paths = ['/run/media/renat/My Passport/MUSIK/The Beatles/']
+        self.paths = ['/run/media/renat/My Passport/MUSIK/Animal Collective/','/run/media/renat/My Passport/MUSIK/The Beatles/','/run/media/renat/My Passport/MUSIK/John Frusciante','/run/media/renat/My Passport/MUSIK/Linkin Park','/run/media/renat/My Passport/MUSIK/Red Hot Chili Peppers','/run/media/renat/My Passport/MUSIK/The Beach Boys']
 
     def write_path(self):
         pass
@@ -81,5 +83,10 @@ class MMP():
                 return album
         return None
 
-    def get_image(self,artist,album):
-        print("get_image")
+    def get_image(self,album):
+        #test: getting the image from first song:
+        if len(album.songs) <=  0:
+            print("Error: No songs")
+            return
+        mfile = eyed3.load(album.songs[0])
+        return mfile.tag.images[0].image_data

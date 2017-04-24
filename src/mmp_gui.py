@@ -2,6 +2,8 @@ from tkinter import *
 from tkinter import filedialog
 from PIL import Image, ImageTk
 import io
+
+import mmp_album_canvas
 import mmp_main
 
 class Gui():
@@ -11,13 +13,16 @@ class Gui():
         self.main = main
         self.window = Tk()
 
-        self.images = []
+        self.album_list = []
 
         self.HEIGHT = self.window.winfo_screenheight()
         self.WIDTH = self.window.winfo_screenwidth()
         self.COLOR = "#EEFFAA"
-        self.COVER_SIZE = 220
+        self.COVER_SIZE_X = 220
+        self.COVER_SIZE_Y = 250
         self.PADDING_PERCENT = 0.1
+        self.ABSOLUTE_PADDING_X = 100
+        self.ABSOLUTE_PADDING_Y = 125
 
 
         self.window.geometry("%dx%d+0+0" % (self.WIDTH, self.HEIGHT))
@@ -49,27 +54,27 @@ class Gui():
 
     def display(self,artists):
         pad = self.get_padding()
-        x_ = y_ = pad + 100 
+        y_  = pad + self.ABSOLUTE_PADDING_Y
+        x_  = pad + self.ABSOLUTE_PADDING_X
         for artist in artists:
             for album in artist.albums:
-                cover = Canvas(self.main_frame,width = self.COVER_SIZE, height = self.COVER_SIZE)
                 output = io.BytesIO(self.main.get_image(album))
                 output.seek(0)
                 img = Image.open(output)
-                img.thumbnail((self.COVER_SIZE,self.COVER_SIZE),Image.ANTIALIAS)
+                img.thumbnail((self.COVER_SIZE_X,self.COVER_SIZE_X),Image.ANTIALIAS)
                 pimg = ImageTk.PhotoImage(img)
-                self.images.append(pimg)
-                cover.create_image(0,0,image=pimg,anchor="nw")
-                cover.pack()
-            
-                self.main_canvas.create_window((x_,y_),width = self.COVER_SIZE, height = self.COVER_SIZE,window = cover)
-            
-                if x_ + self.COVER_SIZE + pad  < self.WIDTH - self.COVER_SIZE:
-                    x_ += self.COVER_SIZE + pad
+
+                ac = mmp_album_canvas.Album_Canvas(self,x_,y_,pimg,artist,album)
+                ac.draw()
+                self.album_list.append(ac)
+
+                if x_ + self.COVER_SIZE_X + pad  < self.WIDTH - self.COVER_SIZE_X:
+                    x_ += self.COVER_SIZE_X + pad
                 else:
-                    x_ = pad + 100
-                    y_ += self.COVER_SIZE + pad
-        self.main_canvas.config(scrollregion=(0,0,0,y_ + self.COVER_SIZE))
+                    x_ = pad + self.ABSOLUTE_PADDING_X
+                    y_ += self.COVER_SIZE_Y + pad
+        self.main_canvas.config(scrollregion=(0,0,0,y_ + self.COVER_SIZE_Y))
+
         self.window.mainloop()
 
     def add_music(self):
@@ -82,6 +87,5 @@ class Gui():
     def reload(self):
         self.main.reload()
 
-
     def get_padding(self):
-        return self.COVER_SIZE * self.PADDING_PERCENT
+        return self.COVER_SIZE_X * self.PADDING_PERCENT

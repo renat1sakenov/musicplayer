@@ -10,6 +10,7 @@ class MMP():
 
     def __init__(self,main):
 
+        self.paths = []
         self.main = main
         self.artists = []
         eyed3.log.setLevel("ERROR")
@@ -29,19 +30,23 @@ class MMP():
         self.music_files = [] #no need for them
 
     def read_paths(self):
-        f = open(mmp_main.PATH_FILE,"a+")
+        f = open(mmp_main.PATH_FILE,"r")
         for line in f:
             self.paths.append(line.strip())
         f.close()
 
-        #test
+        '''test
         self.paths = ['/run/media/renat/My Passport/MUSIK/Animal Collective/','/run/media/renat/My Passport/MUSIK/The Beatles/','/run/media/renat/My Passport/MUSIK/John Frusciante','/run/media/renat/My Passport/MUSIK/Linkin Park','/run/media/renat/My Passport/MUSIK/Red Hot Chili Peppers','/run/media/renat/My Passport/MUSIK/The Beach Boys']
-
+        '''
     def write_path(self):
         pass
 
     def delete_path(self):
         pass
+
+    def reload(self):
+        self.read_paths()
+        self.load_music()
 
     '''
     reading music files from directories into artists -> albums -> songs
@@ -69,6 +74,8 @@ class MMP():
             if self.get_album(str_artist,str_album) == None:
                 album = mmp_album.Album(str_album)
                 self.get_artist(mfile.tag.artist).albums.append(album)
+            else:
+                album = self.get_album(str_artist,str_album)
             album.songs.append(file_p)
 
     def get_artist(self,str_artist):

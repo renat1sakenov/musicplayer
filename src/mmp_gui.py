@@ -1,4 +1,5 @@
 from tkinter import *
+from tkinter import filedialog
 from PIL import Image, ImageTk
 import io
 import mmp_main
@@ -15,7 +16,7 @@ class Gui():
         self.HEIGHT = self.window.winfo_screenheight()
         self.WIDTH = self.window.winfo_screenwidth()
         self.COLOR = "#EEFFAA"
-        self.COVER_SIZE = 150
+        self.COVER_SIZE = 220
         self.PADDING_PERCENT = 0.1
 
 
@@ -26,13 +27,14 @@ class Gui():
         self.menubar = Menu(self.window)
         self.menubar.add_command(label="Add Music", command=self.add_music)
         self.menubar.add_command(label="Options", command=self.options)
+        self.menubar.add_command(label="Reload", command=self.reload)
         self.menubar["bg"] = "white"
         self.menubar["fg"] = "black"
 
         self.main_frame = Frame(self.window,height= self.HEIGHT, width= self.WIDTH,relief=SUNKEN)
         self.main_frame.pack()
 
-        self.main_canvas = Canvas(self.main_frame,height = self.HEIGHT,width = self.WIDTH,bg=self.COLOR,scrollregion=(0,0,0,2000)) 
+        self.main_canvas = Canvas(self.main_frame,height = self.HEIGHT,width = self.WIDTH,bg=self.COLOR) 
 
         self.scrollbar = Scrollbar(self.main_frame,orient=VERTICAL)
         self.scrollbar.pack(side=RIGHT, fill=Y)
@@ -67,13 +69,19 @@ class Gui():
                 else:
                     x_ = pad + 100
                     y_ += self.COVER_SIZE + pad
+        self.main_canvas.config(scrollregion=(0,0,0,y_ + self.COVER_SIZE))
         self.window.mainloop()
 
     def add_music(self):
-        pass
+        dirname = filedialog.askdirectory(parent=self.window,initialdir="/home/",title="Select your music")
+        self.main.add_music(dirname)
 
     def options(self):
         pass
+
+    def reload(self):
+        self.main.reload()
+
 
     def get_padding(self):
         return self.COVER_SIZE * self.PADDING_PERCENT

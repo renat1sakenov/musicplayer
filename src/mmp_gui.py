@@ -5,6 +5,7 @@ import io
 
 import mmp_album_canvas
 import mmp_main
+import mmp_expanded_album
 
 class Gui():
 
@@ -15,6 +16,7 @@ class Gui():
 
         self.album_list = []
 
+        self.COVER_CLICKED = False
         self.HEIGHT = self.window.winfo_screenheight()
         self.WIDTH = self.window.winfo_screenwidth()
         self.COLOR = "#EEFFAA"
@@ -23,7 +25,7 @@ class Gui():
         self.PADDING_PERCENT = 0.1
         self.ABSOLUTE_PADDING_X = 100
         self.ABSOLUTE_PADDING_Y = 125
-
+        self.EXPANDED_COVER_SIZE = self.COVER_SIZE_Y * 1.5
 
         self.window.geometry("%dx%d+0+0" % (self.WIDTH, self.HEIGHT))
         self.window.wm_title("MMP")
@@ -53,20 +55,19 @@ class Gui():
 
 
     def display(self,artists):
+        self.ac_counter = 0
         pad = self.get_padding()
         y_  = pad + self.ABSOLUTE_PADDING_Y
         x_  = pad + self.ABSOLUTE_PADDING_X
         for artist in artists:
             for album in artist.albums:
-                output = io.BytesIO(self.main.get_image(album))
-                output.seek(0)
-                img = Image.open(output)
-                img.thumbnail((self.COVER_SIZE_X,self.COVER_SIZE_X),Image.ANTIALIAS)
-                pimg = ImageTk.PhotoImage(img)
 
-                ac = mmp_album_canvas.Album_Canvas(self,x_,y_,pimg,artist,album)
+                pimg = self.get_cover(album,self.COVER_SIZE_X,self.COVER_SIZE_X)
+
+                ac = mmp_album_canvas.Album_Canvas(self.ac_counter,self,x_,y_,pimg,artist,album)
                 ac.draw()
                 self.album_list.append(ac)
+                self.ac_counter +=1
 
                 if x_ + self.COVER_SIZE_X + pad  < self.WIDTH - self.COVER_SIZE_X:
                     x_ += self.COVER_SIZE_X + pad
@@ -89,3 +90,22 @@ class Gui():
 
     def get_padding(self):
         return self.COVER_SIZE_X * self.PADDING_PERCENT
+
+
+    def get_cover(self,album,x,y):
+        output = io.BytesIO(self.main.get_image(album))
+        output.seek(0)
+        img = Image.open(output)
+        img.thumbnail((x,y),Image.ANTIALIAS)
+        return ImageTk.PhotoImage(img)
+
+
+    def ac_clicked(self,id_):
+        #check if any other album is expanded already
+        if not self.COVER_CLICKED:
+            self.ec = mmp_expanded_album.Expanded_Album(self,self.album_list[id_])
+            self.ec.draw()
+        else:
+            pass
+            #remove self.ec, move everything back and draw new ec
+        #move every ac on row down

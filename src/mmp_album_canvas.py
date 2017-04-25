@@ -31,3 +31,7 @@ class Album_Canvas():
 
     def click(self,event,arg):
         self.gui.ac_clicked(arg)
+
+    def move(self,i):
+        self.gui.main_canvas.move(self.me_id,0,i * self.gui.EXPANDED_COVER_SIZE)
+        self.y += i*self.gui.EXPANDED_COVER_SIZE

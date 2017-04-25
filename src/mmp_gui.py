@@ -16,7 +16,7 @@ class Gui():
 
         self.album_list = []
 
-        self.COVER_CLICKED = False
+        self.COVER_CLICKED_ID  = -1 
         self.HEIGHT = self.window.winfo_screenheight()
         self.WIDTH = self.window.winfo_screenwidth()
         self.COLOR = "#EEFFAA"
@@ -75,7 +75,7 @@ class Gui():
                     x_ = pad + self.ABSOLUTE_PADDING_X
                     y_ += self.COVER_SIZE_Y + pad
         self.main_canvas.config(scrollregion=(0,0,0,y_ + self.COVER_SIZE_Y))
-
+        self.adjust_scrolling()
         self.window.mainloop()
 
     def add_music(self):
@@ -99,13 +99,29 @@ class Gui():
         img.thumbnail((x,y),Image.ANTIALIAS)
         return ImageTk.PhotoImage(img)
 
+    def adjust_scrolling(self):
+        self.main_canvas.config(scrollregion=(0,0,0,self.album_list[len(self.album_list)-1].y + self.COVER_SIZE_Y))
+
+    def move_covers(self,y_,i):
+        for cover in self.album_list:
+            if cover.y > y_:
+                cover.move(i)
 
     def ac_clicked(self,id_):
-        #check if any other album is expanded already
-        if not self.COVER_CLICKED:
+        if self.COVER_CLICKED_ID == -1:
+            self.move_covers(self.album_list[id_].y,1)
             self.ec = mmp_expanded_album.Expanded_Album(self,self.album_list[id_])
             self.ec.draw()
+            self.adjust_scrolling()
+            self.COVER_CLICKED_ID = id_
         else:
-            pass
-            #remove self.ec, move everything back and draw new ec
-        #move every ac on row down
+            if self.COVER_CLICKED_ID == id_:
+                self.ec.remove()
+                self.move_covers(self.album_list[id_].y,-1)
+                self.COVER_CLICKED_ID = -1
+            else:
+                self.ec.remove()
+                self.move_covers(self.album_list[id_].y,-1)
+                self.COVER_CLICKED_ID = -1
+                self.ac_clicked(id_)
+

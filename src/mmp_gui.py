@@ -115,13 +115,10 @@ class Gui():
             self.adjust_scrolling()
             self.COVER_CLICKED_ID = id_
         else:
-            if self.COVER_CLICKED_ID == id_:
-                self.ec.remove()
-                self.move_covers(self.album_list[id_].y,-1)
-                self.COVER_CLICKED_ID = -1
-            else:
-                self.ec.remove()
-                self.move_covers(self.album_list[id_].y,-1)
-                self.COVER_CLICKED_ID = -1
+            self.ec.remove()
+            self.move_covers(self.album_list[self.COVER_CLICKED_ID].y,-1)
+            if self.COVER_CLICKED_ID != id_:
+                self.COVER_CLICKED_ID = -1 
                 self.ac_clicked(id_)
-
+            else:
+                self.COVER_CLICKED_ID = -1

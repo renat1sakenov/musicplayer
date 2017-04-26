@@ -48,27 +48,23 @@ class Gui():
         self.scrollbar.config(command=self.main_canvas.yview)
 
         self.main_canvas.pack()
-
-        self.main_canvas.config(yscrollcommand=self.scrollbar.set)
-        
+        self.main_canvas.config(yscrollcommand=self.scrollbar.set) 
         self.window.config(menu=self.menubar)
 
 
     def display(self,artists):
         self.ac_counter = 0
+        self.album_list = []
         pad = self.get_padding()
         y_  = pad + self.ABSOLUTE_PADDING_Y
         x_  = pad + self.ABSOLUTE_PADDING_X
-        for artist in artists:
-            for album in artist.albums:
-
+        for artist in artists.keys():
+            for album in artists[artist]:
                 pimg = self.get_cover(album,self.COVER_SIZE_X,self.COVER_SIZE_X)
-
                 ac = mmp_album_canvas.Album_Canvas(self.ac_counter,self,x_,y_,pimg,artist,album)
                 ac.draw()
                 self.album_list.append(ac)
                 self.ac_counter +=1
-
                 if x_ + self.COVER_SIZE_X + pad  < self.WIDTH - self.COVER_SIZE_X:
                     x_ += self.COVER_SIZE_X + pad
                 else:

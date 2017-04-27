@@ -24,6 +24,9 @@ class Main():
             f.close()
         except:
             print("Error writing to ./mymusic ")
+
+    def display(self):
+        self.gui.display(self.mmp_o.artists)
     
     def reload(self):
         self.mmp_o.reload()

@@ -30,6 +30,7 @@ class Gui():
         self.window.geometry("%dx%d+0+0" % (self.WIDTH, self.HEIGHT))
         self.window.wm_title("MMP")
         self.window["bg"] = "white"
+        self.window.bind("<Configure>",self.on_resize)
 
         self.menubar = Menu(self.window)
         self.menubar.add_command(label="Add Music", command=self.add_music)
@@ -51,6 +52,13 @@ class Gui():
         self.main_canvas.config(yscrollcommand=self.scrollbar.set) 
         self.window.config(menu=self.menubar)
 
+    def on_resize(self,event):
+        print("resize")
+        if self.WIDTH != event.width or self.HEIGHT != event.height:
+            print("do")
+            self.WIDTH = event.width
+            self.HEIGHT = event.height
+            #self.main.display()
 
     def display(self,artists):
         self.ac_counter = 0

@@ -25,12 +25,13 @@ class Gui():
         self.PADDING_PERCENT = 0.1
         self.ABSOLUTE_PADDING_X = 100
         self.ABSOLUTE_PADDING_Y = 125
+
+        #the minimal height of an expanded albun view
         self.EXPANDED_COVER_SIZE = self.COVER_SIZE_Y * 1.5
 
         self.window.geometry("%dx%d+0+0" % (self.WIDTH, self.HEIGHT))
         self.window.wm_title("MMP")
         self.window["bg"] = "white"
-        self.window.bind("<Configure>",self.on_resize)
 
         self.menubar = Menu(self.window)
         self.menubar.add_command(label="Add Music", command=self.add_music)
@@ -51,14 +52,6 @@ class Gui():
         self.main_canvas.pack()
         self.main_canvas.config(yscrollcommand=self.scrollbar.set) 
         self.window.config(menu=self.menubar)
-
-    def on_resize(self,event):
-        print("resize")
-        if self.WIDTH != event.width or self.HEIGHT != event.height:
-            print("do")
-            self.WIDTH = event.width
-            self.HEIGHT = event.height
-            #self.main.display()
 
     def display(self,artists):
         self.ac_counter = 0
@@ -106,21 +99,22 @@ class Gui():
     def adjust_scrolling(self):
         self.main_canvas.config(scrollregion=(0,0,0,self.album_list[len(self.album_list)-1].y + self.COVER_SIZE_Y))
 
-    def move_covers(self,y_,i):
+    def move_covers(self,y_,i,move_size):
         for cover in self.album_list:
             if cover.y > y_:
-                cover.move(i)
+                cover.move(i,move_size)
 
     def ac_clicked(self,id_):
         if self.COVER_CLICKED_ID == -1:
-            self.move_covers(self.album_list[id_].y,1)
             self.ec = mmp_expanded_album.Expanded_Album(self,self.album_list[id_])
             self.ec.draw()
+            self.move_size = self.ec.TOTAL_SIZE 
+            self.move_covers(self.album_list[id_].y,1,self.move_size)
             self.adjust_scrolling()
             self.COVER_CLICKED_ID = id_
         else:
             self.ec.remove()
-            self.move_covers(self.album_list[self.COVER_CLICKED_ID].y,-1)
+            self.move_covers(self.album_list[self.COVER_CLICKED_ID].y,-1,self.move_size)
             if self.COVER_CLICKED_ID != id_:
                 self.COVER_CLICKED_ID = -1 
                 self.ac_clicked(id_)

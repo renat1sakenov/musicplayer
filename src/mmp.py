@@ -49,10 +49,11 @@ class MMP():
             mfile = eyed3.load(file_p)
             str_artist = mfile.tag.artist
             str_album = mfile.tag.album
+            str_track = file_p.split("/")[-1] if (mfile.tag.title == None) else  mfile.tag.title
             if self.get_album(self.artists[str_artist],str_album) == None:
                 album = mmp_album.Album(str_album)
                 self.artists[str_artist].append(album)
-            self.get_album(self.artists[str_artist],str_album).songs.append(file_p)
+            self.get_album(self.artists[str_artist],str_album).songs.append((file_p,str_track))
         self.music_files = []   
 
 
@@ -67,5 +68,5 @@ class MMP():
         if len(album.songs) <=  0:
             print("Error: No songs")
             return
-        mfile = eyed3.load(album.songs[0])
+        mfile = eyed3.load(album.songs[0][0])
         return mfile.tag.images[0].image_data

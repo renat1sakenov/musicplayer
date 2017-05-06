@@ -19,10 +19,10 @@ class Expanded_Album():
         self.INNER_CANVAS_OFFSET_Y = 55 
         self.ac = album_canvas       
 
-        self.TRACK_HEIGHT = 30 #test
+        self.TRACK_HEIGHT = 30    
         self.TRACK_WIDTH = .5 
         
-        self.TRACK_LIST_MAX_LEN = 5
+        self.TRACK_LIST_MAX_LEN = 10
         self.DUAL_LIST = False
 
         self.img = self.gui.get_cover(self.ac.album,self.COVER_SIZE,self.COVER_SIZE) 
@@ -31,15 +31,14 @@ class Expanded_Album():
     def draw(self):
         
         self.TOTAL_SIZE = self.gui.EXPANDED_COVER_SIZE 
-
         #there will be two columns for the tracks 
         if len(self.ac.album.songs) > self.TRACK_LIST_MAX_LEN:
             self.DUAL_LIST = True
 
         #if the album contains more than "10" tracks, the expanded view must be drawn larger than the minimal expanded view.
         if len(self.ac.album.songs) > 2*self.TRACK_LIST_MAX_LEN: 
-            self.TOTAL_SIZE += (len(self.ac.album.songs) - 2*self.TRACK_LIST_MAX_LEN)/2
-                    
+            self.TOTAL_SIZE += ((len(self.ac.album.songs)- 2*self.TRACK_LIST_MAX_LEN)/2) *self.TRACK_HEIGHT 
+                
         #the main canvas for the expande view 
         me = Canvas(self.gui.main_frame,width=self.gui.WIDTH,height = self.TOTAL_SIZE, bg = self.COLOR, highlightthickness = 0)
         me.create_image(self.COVER_PADDING,self.COVER_PADDING,image=self.img,anchor = "nw")
@@ -50,7 +49,7 @@ class Expanded_Album():
         
         
         #the canvas in which the tracks are shown.
-        inner_can = Canvas(me,width=self.gui.WIDTH * 0.7 ,height = self.TOTAL_SIZE * 0.6 , bg = self.INNER_COLOR, highlightthickness=0)
+        inner_can = Canvas(me,width=self.gui.WIDTH * 0.7 ,height = self.TOTAL_SIZE - 70 , bg = self.INNER_COLOR, highlightthickness=0)
         
         xt=yt = 0
         for track in self.ac.album.songs:
@@ -67,7 +66,7 @@ class Expanded_Album():
             else:
                 yt += self.TRACK_HEIGHT
         inner_can.pack()
-        me.create_window((self.TEXT_PADDING_X, self.INNER_CANVAS_OFFSET_Y),width=self.gui.WIDTH * 0.7,height=self.TOTAL_SIZE * 0.7,anchor ="nw",window=inner_can)	
+        me.create_window((self.TEXT_PADDING_X, self.INNER_CANVAS_OFFSET_Y),width=self.gui.WIDTH * 0.7,height=self.TOTAL_SIZE - 70,anchor ="nw",window=inner_can)	
         me.pack()
 
         self.me_id = self.gui.main_canvas.create_window((0,y_pos),width=self.gui.WIDTH-20,height = self.TOTAL_SIZE,anchor = "nw",window = me)

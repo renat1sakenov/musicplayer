@@ -19,6 +19,12 @@ class Album_Canvas():
     def draw(self):
        me = Canvas(self.gui.main_frame,width=self.gui.COVER_SIZE_X, height = self.gui.COVER_SIZE_Y,bg = self.gui.COLOR,highlightthickness = 0)
        me.create_image(0,0,image=self.cover,anchor="nw")
+
+       #TODO remove and solve somewhere else
+       if self.album.name == None or self.artist == None:
+           self.album.name = "default"
+           self.artist = "default"
+
        me.create_text(0,self.gui.COVER_SIZE_X,font=("Purisa",10),anchor="nw",text=self.artist + " - " + self.album.name)
 
        me.bind("<Button-1>",lambda event, arg=self.id: self.click(event,arg))

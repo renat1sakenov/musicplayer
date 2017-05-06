@@ -1,5 +1,4 @@
 import mmp_main
-import mmp_artist
 import mmp_album
 
 import os
@@ -48,7 +47,7 @@ class MMP():
         for file_p in self.music_files:
             mfile = eyed3.load(file_p)
             str_artist = mfile.tag.artist
-            str_album = mfile.tag.album
+            str_album = mfile.tag.album 
             str_track = file_p.split("/")[-1] if (mfile.tag.title == None) else  mfile.tag.title
             if self.get_album(self.artists[str_artist],str_album) == None:
                 album = mmp_album.Album(str_album)
@@ -64,9 +63,11 @@ class MMP():
         return None
 
     def get_image(self,album):
-        #test: getting the image from first song:
         if len(album.songs) <=  0:
             print("Error: No songs")
             return
         mfile = eyed3.load(album.songs[0][0])
-        return mfile.tag.images[0].image_data
+        if len(mfile.tag.images) > 0:
+            return mfile.tag.images[0].image_data
+        else: 
+            return open("../cover/std.png","rb").read()

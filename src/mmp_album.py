@@ -2,6 +2,6 @@
 
 class Album():
 
-    def __init__(self,name):
+    def __init__(self,name="default"):
         self.name = name
         self.songs = []

@@ -2,16 +2,20 @@
 
 import mmp_gui
 import mmp
+import mmp_audio
+
 
 PATH_FILE = "./mymusic"
 
 
 class Main():
 
-    def __init__(self):
+    def __init__(self): 
+        self.audio_thread = mmp_audio.Audio(self)
         self.mmp_o =  mmp.MMP(self)
         self.gui  = mmp_gui.Gui(self)
         self.gui.display(self.mmp_o.artists)
+ 
 
 
     def get_image(self,album):
@@ -31,6 +35,14 @@ class Main():
     def reload(self):
         self.mmp_o.reload()
         self.gui.display(self.mmp_o.artists)
+    
+
+    def next_track(self):
+        pass
+
+    def play(self,track):
+        self.audio_thread.play(track)
+
 
 if __name__ == "__main__":
     Main()

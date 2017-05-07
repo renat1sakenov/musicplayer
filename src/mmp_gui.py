@@ -121,3 +121,6 @@ class Gui():
                 self.ac_clicked(id_)
             else:
                 self.COVER_CLICKED_ID = -1
+
+    def play(self,track):
+        self.main.play(track)

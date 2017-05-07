@@ -56,6 +56,7 @@ class Expanded_Album():
             track_can = Canvas(inner_can,width = self.TRACK_WIDTH*self.gui.WIDTH*0.7, height = self.TRACK_HEIGHT,bg = self.INNER_COLOR,highlightthickness=0)
             track_can.create_text(0,0,font=("Purisa",15),anchor="nw",text=track[1])
             track_can.pack()
+            track_can.bind("<Button-1>",lambda event, arg=track[0]: self.play(event,arg))
             inner_can.create_window((xt,yt),width=self.TRACK_WIDTH*self.gui.WIDTH*0.7,height=self.TRACK_HEIGHT,anchor="nw",window=track_can)        
             if self.DUAL_LIST:
                 if xt == 0:
@@ -70,7 +71,9 @@ class Expanded_Album():
         me.pack()
 
         self.me_id = self.gui.main_canvas.create_window((0,y_pos),width=self.gui.WIDTH-20,height = self.TOTAL_SIZE,anchor = "nw",window = me)
-
+    
+    def play(self,event,track):
+        self.gui.play(track)
 
     def remove(self):
         self.gui.main_canvas.delete(self.me_id)

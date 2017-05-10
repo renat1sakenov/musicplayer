@@ -73,7 +73,7 @@ class Expanded_Album():
         self.me_id = self.gui.main_canvas.create_window((0,y_pos),width=self.gui.WIDTH-20,height = self.TOTAL_SIZE,anchor = "nw",window = me)
     
     def play(self,event,track):
-        self.gui.play(track)
+        self.gui.play(track,self.ac.album,self.ac.artist)
 
     def remove(self):
         self.gui.main_canvas.delete(self.me_id)

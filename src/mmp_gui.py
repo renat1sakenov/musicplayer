@@ -122,5 +122,5 @@ class Gui():
             else:
                 self.COVER_CLICKED_ID = -1
 
-    def play(self,track):
-        self.main.play(track)
+    def play(self,track,album,artist):
+        self.main.play(track,album,artist)

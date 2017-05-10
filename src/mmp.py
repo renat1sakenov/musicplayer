@@ -1,5 +1,6 @@
 import mmp_main
 import mmp_album
+import mmp_audio
 
 import os
 import fnmatch
@@ -13,7 +14,14 @@ class MMP():
         self.paths = []
         self.main = main
         self.artists = defaultdict(list)
+        self.audio = mmp_audio.Audio(self)
         eyed3.log.setLevel("ERROR")
+
+        self.current_album = None
+        self.current_song = None
+        self.current_artist = None
+
+        self.LOOP = False
 
         self.read_paths()
         self.load_music()
@@ -71,3 +79,17 @@ class MMP():
             return mfile.tag.images[0].image_data
         else: 
             return open("../cover/std.png","rb").read()
+
+    def next_track(self):
+        self.current_song = self.current_album.get_next(self.current_song)[0]
+        if self.current_song != None:
+            self.audio.play(self.current_song)
+        else:
+            if self.LOOP:
+                self.current_song = self.current_album.songs[0][0]
+
+    def play(self,track,album,artist):
+        self.current_album = album
+        self.current_song = track
+        self.current_artist = artist
+        self.audio.play(track)

@@ -1,14 +1,14 @@
 import subprocess
 from threading import Thread
 
-import mmp_main
+import mmp
 
 
 class Audio():
 
 
-    def __init__(self,main):
-        self.main = main
+    def __init__(self,control):
+        self.control = control
         self.playing = None
         self.thread_check = None
 
@@ -33,4 +33,5 @@ class Audio():
             self.next_track()
 
     def next_track(self):
-        self.main.next_track()
+        self.playing = None
+        self.control.next_track()

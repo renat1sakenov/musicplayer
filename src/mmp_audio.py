@@ -10,28 +10,22 @@ class Audio():
     def __init__(self,control):
         self.control = control
         self.playing = None
-        self.thread_check = None
+        self.thread_play = None
+        self.PLAYING_B = False
 
     def play(self,track):
-        self.TRACK_FINISHED = True
-        if self.playing == None:
-            self.playing = subprocess.Popen(['mpg123','-q',track])
-            self.thread_check = Thread(target=self.run)
-            self.thread_check.start()
+        if not self.PLAYING_B:
+            self.PLAYING_B = True
+            self.thread_play = Thread(target=self.run,args = (track,))
+            self.thread_play.start()
         else: 
-            self.TRACK_FINISHED = False
+            self.PLAYING_B = False
             self.playing.terminate()
-            self.playing = None
             self.play(track)
 
-
-    def run(self):
-        while self.playing.poll() == None:
-            pass
-        if self.TRACK_FINISHED:
-            print("track finished")
-            self.next_track()
-
-    def next_track(self):
-        self.playing = None
-        self.control.next_track()
+    def run(self,track):
+        print("playing " + str(self.playing))
+        self.playing = subprocess.Popen(['mpg123','-q',track]).wait()
+        print("2 " + str(self.playing))
+        if self.PLAYING_B:
+            self.control.next_track()

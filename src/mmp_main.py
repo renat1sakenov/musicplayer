@@ -4,7 +4,7 @@ import mmp_gui
 import mmp
 
 PATH_FILE = "./mymusic"
-
+	
 
 class Main():
 
@@ -35,6 +35,9 @@ class Main():
 
     def play(self,track,album,artist):
         self.mmp_o.play(track,album,artist)
+
+    def pause(self):
+        self.mmp_o.pause()
     
 
 if __name__ == "__main__":

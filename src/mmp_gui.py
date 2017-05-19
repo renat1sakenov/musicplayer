@@ -3,6 +3,7 @@ from tkinter import filedialog
 from PIL import Image, ImageTk
 import io
 
+import mmp_playmenu
 import mmp_album_canvas
 import mmp_main
 import mmp_expanded_album
@@ -24,7 +25,10 @@ class Gui():
         self.COVER_SIZE_Y = 250
         self.PADDING_PERCENT = 0.1
         self.ABSOLUTE_PADDING_X = 100
-        self.ABSOLUTE_PADDING_Y = 125
+        self.ABSOLUTE_PADDING_Y = 195 # 125
+        
+        self.PLAYMENU_HEIGHT = 75
+
 
         #the minimal height of an expanded albun view
         self.EXPANDED_COVER_SIZE = self.COVER_SIZE_Y * 1.5
@@ -55,7 +59,8 @@ class Gui():
 
     def display(self,artists):
         self.ac_counter = 0
-        self.album_list = []
+        self.album_list = [] 
+        self.playmenu = mmp_playmenu.Playmenu(self)
         pad = self.get_padding()
         y_  = pad + self.ABSOLUTE_PADDING_Y
         x_  = pad + self.ABSOLUTE_PADDING_X
@@ -98,7 +103,8 @@ class Gui():
 
     def adjust_scrolling(self):
         self.main_canvas.config(scrollregion=(0,0,0,self.album_list[len(self.album_list)-1].y + self.COVER_SIZE_Y))
-
+    
+    ''' moves the cover objects that are below y_ in move_size. i should have the value -1 or 1 (for up and down) '''
     def move_covers(self,y_,i,move_size):
         for cover in self.album_list:
             if cover.y > y_:
@@ -124,3 +130,6 @@ class Gui():
 
     def play(self,track,album,artist):
         self.main.play(track,album,artist)
+    
+    def pause(self):
+        self.main.pause()

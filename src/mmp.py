@@ -81,15 +81,19 @@ class MMP():
             return open("../cover/std.png","rb").read()
 
     def next_track(self):
-        self.current_song = self.current_album.get_next(self.current_song)[0]
+        self.current_song = self.current_album.get_next(self.current_song)
         if self.current_song != None:
             self.audio.play(self.current_song)
         else:
             if self.LOOP:
                 self.current_song = self.current_album.songs[0][0]
+                self.audio.play(self.current_song)
 
     def play(self,track,album,artist):
         self.current_album = album
         self.current_song = track
         self.current_artist = artist
         self.audio.play(track)
+
+    def pause(self):
+        self.audio.pause()

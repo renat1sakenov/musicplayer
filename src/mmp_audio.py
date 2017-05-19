@@ -1,5 +1,8 @@
 import subprocess
+import os
+import time
 from threading import Thread
+
 
 import mmp
 
@@ -10,22 +13,25 @@ class Audio():
     def __init__(self,control):
         self.control = control
         self.playing = None
-        self.thread_play = None
-        self.PLAYING_B = False
+        self.PLAYING_NOW = False
 
     def play(self,track):
-        if not self.PLAYING_B:
-            self.PLAYING_B = True
-            self.thread_play = Thread(target=self.run,args = (track,))
-            self.thread_play.start()
+        if not self.PLAYING_NOW:
+            print("MMP: New track " + str(track))
+            self.PLAYING_NOW = True
+            self.playing = subprocess.Popen(['mpg123','-C',track],stdin=subprocess.PIPE)
+            #some kind of polling / interrupt when the track ends, :
+            '''
+            if self.PLAYING_NOW:
+                self.control.next_track()
+            '''
         else: 
-            self.PLAYING_B = False
-            self.playing.terminate()
+            print("MMP: Interrupting current track")
+            self.PLAYING_NOW = False
+            os.system("killall mpg123") #todo..
+            time.sleep(0.1)		#very bad, change so that current process really died
             self.play(track)
 
-    def run(self,track):
-        print("playing " + str(self.playing))
-        self.playing = subprocess.Popen(['mpg123','-q',track]).wait()
-        print("2 " + str(self.playing))
-        if self.PLAYING_B:
-            self.control.next_track()
+    def pause(self):
+        print("trying now!")
+        self.playing.communicate("s".encode())

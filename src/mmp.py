@@ -17,11 +17,6 @@ class MMP():
         self.audio = mmp_audio.Audio(self)
         eyed3.log.setLevel("ERROR")
 
-        self.current_album = None
-        self.current_song = None
-        self.current_artist = None
-
-        self.LOOP = False
 
         self.read_paths()
         self.load_music()
@@ -79,7 +74,7 @@ class MMP():
             return mfile.tag.images[0].image_data
         else: 
             return open("../cover/std.png","rb").read()
-
+    '''
     def next_track(self):
         self.current_song = self.current_album.get_next(self.current_song)
         if self.current_song != None:
@@ -88,12 +83,15 @@ class MMP():
             if self.LOOP:
                 self.current_song = self.current_album.songs[0][0]
                 self.audio.play(self.current_song)
-
+    '''
     def play(self,track,album,artist):
-        self.current_album = album
-        self.current_song = track
-        self.current_artist = artist
-        self.audio.play(track)
+        self.audio.play(track,album)
 
     def pause(self):
         self.audio.pause()
+
+    def next(self):
+        self.audio.next()
+
+    def loop(self):
+        self.audio.loop()

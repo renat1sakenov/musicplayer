@@ -38,6 +38,12 @@ class Main():
 
     def pause(self):
         self.mmp_o.pause()
+
+    def next(self):
+        self.mmp_o.next()
+
+    def loop(self):
+        self.mmp_o.loop()
     
 
 if __name__ == "__main__":

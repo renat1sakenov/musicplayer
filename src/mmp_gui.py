@@ -133,3 +133,9 @@ class Gui():
     
     def pause(self):
         self.main.pause()
+
+    def next(self):
+        self.main.next()
+
+    def loop(self):
+        self.main.loop()

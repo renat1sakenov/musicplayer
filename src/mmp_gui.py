@@ -139,3 +139,9 @@ class Gui():
 
     def loop(self):
         self.main.loop()
+
+    def slider(self,change):
+        self.main.slider(change)
+
+    def update_slider(self,change):
+        self.playmenu.update_slider(change)

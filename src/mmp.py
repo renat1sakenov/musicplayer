@@ -95,3 +95,9 @@ class MMP():
 
     def loop(self):
         self.audio.loop()
+
+    def slider(self,change):
+        self.audio.slider(change)
+
+    def update_slider(self,change):
+        self.main.update_slider(change)

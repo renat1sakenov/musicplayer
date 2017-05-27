@@ -6,6 +6,7 @@ class Playmenu():
 
     def __init__(self,gui):
         self.gui = gui
+        self.ENABLE_UPDATE = False
         me = Canvas(self.gui.main_frame,width=self.gui.WIDTH,height=self.gui.PLAYMENU_HEIGHT,bg = "red",highlightthickness=0)
 
         pause_can = Canvas(me,width = 100 ,height = 50,bg = "green", highlightthickness=0)
@@ -23,6 +24,12 @@ class Playmenu():
         loop_can.pack()
         me.create_window((220,0),width=50,height=25,anchor="nw",window=loop_can)
 
+        self.slider = Scale(me,from_=0,to=100, orient=HORIZONTAL, command = self.slider_move)
+        self.slider.bind("<Enter>", self.toggle_slider_update)
+        self.slider.bind("<Leave>", self.toggle_slider_update)
+        self.slider.pack()
+        me.create_window((300,0),width=100,height = 50,anchor="nw",window=self.slider)
+
         me.pack()
         self.me_id = self.gui.main_canvas.create_window((0,0),width=self.gui.WIDTH,height=self.gui.PLAYMENU_HEIGHT,anchor="nw",window=me)
 
@@ -34,3 +41,13 @@ class Playmenu():
 
     def loop(self,event):
         self.gui.loop()
+
+    def slider_move(self,event):
+        if self.ENABLE_UPDATE: 
+            self.gui.slider(self.slider.get())
+
+    def update_slider(self,change):
+        self.slider.set(change*100)
+
+    def toggle_slider_update(self,event):
+        self.ENABLE_UPDATE = not self.ENABLE_UPDATE

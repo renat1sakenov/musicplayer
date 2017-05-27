@@ -44,7 +44,12 @@ class Main():
 
     def loop(self):
         self.mmp_o.loop()
-    
+
+    def slider(self,change):
+        self.mmp_o.slider(change)
+   
+    def update_slider(self,change):
+        self.gui.update_slider(change) 
 
 if __name__ == "__main__":
     Main()

@@ -3,6 +3,9 @@ import mmp
 from vlc import MediaPlayer as player
 from vlc import MediaListPlayer as mlistplayer
 from vlc import MediaList as mlist
+from threading import Thread
+
+import time
 
 class Audio():
 
@@ -13,6 +16,7 @@ class Audio():
         self.LOOP = False 
         self.PLAYING_NOW = False
         self.ALBUM_SELECTED = False
+        self.SLIDER_UPDATE = True
 
     def play(self,track,album):
         self.ALBUM_SELECTED = True
@@ -34,8 +38,12 @@ class Audio():
                     current_album.add_media(song[0])
             self.playlist.set_media_list(current_album)
             self.playlist.play()
+
+            Thread(target=self.start_slider_updater).start()
+
         else:
             self.playing.stop()
+            self.SLIDER_UPDATE = False
             self.PLAYING_NOW = False
             self.play(track,album)
 
@@ -43,6 +51,7 @@ class Audio():
     def next(self):
         if self.ALBUM_SELECTED:
             self.PLAYING_NOW = False
+            self.SLIDER_UPDATE = False
             self.playing.stop()
             if self.playlist.next() == -1:
                 if self.LOOP:
@@ -55,4 +64,13 @@ class Audio():
 
     def loop(self):
         self.LOOP = not self.LOOP
+
+    def slider(self,change):
+        self.playing.set_position(float(change/100))
+
+
+    def start_slider_updater(self):
+        while self.SLIDER_UPDATE:
+            time.sleep(1)
+            self.control.update_slider(self.playing.get_position())
        

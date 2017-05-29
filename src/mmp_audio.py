@@ -21,6 +21,7 @@ class Audio():
     def play(self,track,album):
         self.ALBUM_SELECTED = True
         if not self.PLAYING_NOW:
+            self.SLIDER_UPDATE = True
             self.PLAYING_NOW = True
             self.calbum = album
             
@@ -73,4 +74,8 @@ class Audio():
         while self.SLIDER_UPDATE:
             time.sleep(1)
             self.control.update_slider(self.playing.get_position())
+
+    def adjust_volume(self,change):
+        if self.playing != None:
+            self.playing.audio_set_volume(change)
        

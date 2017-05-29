@@ -17,7 +17,7 @@ class Album_Canvas():
 
 
     def draw(self):
-       me = Canvas(self.gui.main_frame,width=self.gui.COVER_SIZE_X, height = self.gui.COVER_SIZE_Y,bg = self.gui.COLOR,highlightthickness = 0)
+       me = Canvas(self.gui.main_canvas,width=self.gui.COVER_SIZE_X, height = self.gui.COVER_SIZE_Y,bg = self.gui.COLOR,highlightthickness = 0)
        me.create_image(0,0,image=self.cover,anchor="nw")
 
        #TODO remove and solve somewhere else

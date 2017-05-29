@@ -40,7 +40,7 @@ class Expanded_Album():
             self.TOTAL_SIZE += ((len(self.ac.album.songs)- 2*self.TRACK_LIST_MAX_LEN)/2) *self.TRACK_HEIGHT 
                 
         #the main canvas for the expande view 
-        me = Canvas(self.gui.main_frame,width=self.gui.WIDTH,height = self.TOTAL_SIZE, bg = self.COLOR, highlightthickness = 0)
+        me = Canvas(self.gui.main_canvas,width=self.gui.WIDTH,height = self.TOTAL_SIZE, bg = self.COLOR, highlightthickness = 0)
         me.create_image(self.COVER_PADDING,self.COVER_PADDING,image=self.img,anchor = "nw")
         me.create_text(self.TEXT_PADDING_X,self.COVER_PADDING,font=("Purisa",20),anchor="nw",text = self.ac.artist + " - " + self.ac.album.name)
 	

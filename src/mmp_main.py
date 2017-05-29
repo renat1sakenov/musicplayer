@@ -51,6 +51,9 @@ class Main():
     def update_slider(self,change):
         self.gui.update_slider(change) 
 
+    def adjust_volume(self,change):
+        self.mmp_o.adjust_volume(change)
+
 if __name__ == "__main__":
     Main()
 

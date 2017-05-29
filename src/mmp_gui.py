@@ -25,7 +25,7 @@ class Gui():
         self.COVER_SIZE_Y = 250
         self.PADDING_PERCENT = 0.1
         self.ABSOLUTE_PADDING_X = 100
-        self.ABSOLUTE_PADDING_Y = 195 # 125
+        self.ABSOLUTE_PADDING_Y = 125 
         
         self.PLAYMENU_HEIGHT = 75
 
@@ -47,7 +47,9 @@ class Gui():
         self.main_frame = Frame(self.window,height= self.HEIGHT, width= self.WIDTH,relief=SUNKEN)
         self.main_frame.pack()
 
-        self.main_canvas = Canvas(self.main_frame,height = self.HEIGHT,width = self.WIDTH,bg=self.COLOR) 
+        self.playmenu = mmp_playmenu.Playmenu(self)
+
+        self.main_canvas = Canvas(self.main_frame,height = self.HEIGHT-self.PLAYMENU_HEIGHT,width = self.WIDTH,bg=self.COLOR) 
 
         self.scrollbar = Scrollbar(self.main_frame,orient=VERTICAL)
         self.scrollbar.pack(side=RIGHT, fill=Y)
@@ -60,7 +62,7 @@ class Gui():
     def display(self,artists):
         self.ac_counter = 0
         self.album_list = [] 
-        self.playmenu = mmp_playmenu.Playmenu(self)
+        #self.playmenu = mmp_playmenu.Playmenu(self)
         pad = self.get_padding()
         y_  = pad + self.ABSOLUTE_PADDING_Y
         x_  = pad + self.ABSOLUTE_PADDING_X
@@ -145,3 +147,6 @@ class Gui():
 
     def update_slider(self,change):
         self.playmenu.update_slider(change)
+
+    def adjust_volume(self,change):
+        self.main.adjust_volume(change)

@@ -13,4 +13,9 @@ class Album():
             if self.songs[i][0]== song and i < len(self.songs)-1:
                 return self.songs[i+1][0]
         return None
+           
+    def get_index(self,song):
+        for i in range(len(self.songs)):
+            if self.songs[i][0]  == song:
+                return i
             

@@ -3,7 +3,12 @@ import mmp
 from vlc import MediaPlayer as player
 from vlc import MediaListPlayer as mlistplayer
 from vlc import MediaList as mlist
+
+#
+from vlc import Media as media
+#
 from threading import Thread
+from random import randint
 
 import time
 
@@ -14,10 +19,12 @@ class Audio():
         self.control = control
         self.playing = None
         self.calbum = None
+        self.track = None
         self.LOOP = False 
         self.PLAYING_NOW = False
         self.ALBUM_SELECTED = False
         self.SLIDER_UPDATE = True
+        self.SHUFFLE = False
 
     def play(self,track,album):
         self.ALBUM_SELECTED = True
@@ -25,24 +32,19 @@ class Audio():
             self.SLIDER_UPDATE = True
             self.PLAYING_NOW = True
             self.calbum = album
-            
+            self.track = track            
+
             #set up new playlist, the album
             self.playlist = mlistplayer()
             self.playing = player()
             self.playlist.set_media_player(self.playing)
             
-            b = False
-            current_album = mlist()
-            for song in album.songs:
-                if  song[0] == track:
-                    b = True
-                if b: 
-                    current_album.add_media(song[0])
-            self.playlist.set_media_list(current_album)
-            self.playlist.play()
+            if self.SHUFFLE:
+                self.shuffle() 
+            else:
+                self.set_playlist()
 
             Thread(target=self.start_slider_updater).start()
-
         else:
             self.playing.stop()
             self.SLIDER_UPDATE = False
@@ -81,10 +83,34 @@ class Audio():
             self.playing.audio_set_volume(change)
 
 
-   def shuffle(self):
-       self.playlist.set_media_list(shuffle_album)
+    def shuffle(self):
+       self.SHUFFLE = not self.SHUFFLE
+       if self.ALBUM_SELECTED:
+           if self.SHUFFLE:
+           
+               shuffle_album = mlist()
+               shuffle_album.add_media(self.track)
+               l = len(self.calbum.songs)
+               ilist = [self.calbum.get_index(self.track)]
+ 
+               while shuffle_album.count() != l:
+                   i = randint(0,l-1)    
+                   if i not in ilist:
+                       ilist.append(i) 
+                       shuffle_album.add_media(self.calbum.songs[i][0])
+               self.playlist.set_media_list(shuffle_album)
+           else:
+               self.set_playlist()
 
+    def set_playlist(self):
+       b = False
+       current_album = mlist()
+       for song in self.calbum.songs:
+           if  song[0] == self.track:
+              b = True
+           if b: 
+               current_album.add_media(song[0])
+       self.playlist.set_media_list(current_album)
+       self.playlist.play()
 
-   def set_playlist(self):
-       pass
        

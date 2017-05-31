@@ -20,6 +20,7 @@ class Playmenu():
         next_can.pack()
         next_can.create_text(20,20,anchor="nw",text="Next")  #for now
         me.create_window((110,0),width=100, height = 50, anchor="nw",window=next_can)
+
         
         loop_can = Canvas(me,width = 50, height = 25, bg = "blue", highlightthickness=0)
         loop_can.bind("<Button-1>",self.loop)
@@ -37,6 +38,12 @@ class Playmenu():
         self.volume.set(100)
         self.volume.pack()
         me.create_window((410,0),width=100,height=70,anchor="nw",window=self.volume)
+
+        shuffle = Canvas(me,width=100,height = 50, bg = "magenta", highlightthickness=0)
+        shuffle.bind("<Button-1>",self.shuffle)
+        shuffle.pack()
+        shuffle.create_text(20,20,anchor="nw",text="shuffle") #for now
+        me.create_window((520,0),width=100,height=50,anchor="nw",window=shuffle)
  
         me.pack()
         #self.me_id = self.gui.main_canvas.create_window((0,0),width=self.gui.WIDTH,height=self.gui.PLAYMENU_HEIGHT,anchor="nw",window=me)
@@ -62,3 +69,7 @@ class Playmenu():
 
     def adjust_volume(self,event):
         self.gui.adjust_volume(self.volume.get())
+
+
+    def shuffle(self,event):
+        self.gui.shuffle()

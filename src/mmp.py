@@ -104,3 +104,6 @@ class MMP():
 
     def adjust_volume(self,change):
         self.audio.adjust_volume(change) 
+
+    def shuffle(self):
+        self.audio.shuffle()

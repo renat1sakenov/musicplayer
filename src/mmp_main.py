@@ -54,6 +54,10 @@ class Main():
     def adjust_volume(self,change):
         self.mmp_o.adjust_volume(change)
 
+
+    def shuffle(self):
+        self.mmp_o.shuffle()
+
 if __name__ == "__main__":
     Main()
 

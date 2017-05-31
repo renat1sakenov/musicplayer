@@ -26,7 +26,10 @@ class Gui():
         self.PADDING_PERCENT = 0.1
         self.ABSOLUTE_PADDING_X = 100
         self.ABSOLUTE_PADDING_Y = 125 
-        
+
+        self.ec = None
+        self.last_row_clicked = False
+ 
         self.PLAYMENU_HEIGHT = 75
 
 
@@ -62,7 +65,6 @@ class Gui():
     def display(self,artists):
         self.ac_counter = 0
         self.album_list = [] 
-        #self.playmenu = mmp_playmenu.Playmenu(self)
         pad = self.get_padding()
         y_  = pad + self.ABSOLUTE_PADDING_Y
         x_  = pad + self.ABSOLUTE_PADDING_X
@@ -104,7 +106,10 @@ class Gui():
         return ImageTk.PhotoImage(img)
 
     def adjust_scrolling(self):
-        self.main_canvas.config(scrollregion=(0,0,0,self.album_list[len(self.album_list)-1].y + self.COVER_SIZE_Y))
+        if self.ec != None and self.last_row_clicked: 
+            self.main_canvas.config(scrollregion=(0,0,0,self.album_list[len(self.album_list)-1].y + self.COVER_SIZE_Y + self.ec.TOTAL_SIZE))
+        else:
+            self.main_canvas.config(scrollregion=(0,0,0,self.album_list[len(self.album_list)-1].y + self.COVER_SIZE_Y))
     
     ''' moves the cover objects that are below y_ in move_size. i should have the value -1 or 1 (for up and down) '''
     def move_covers(self,y_,i,move_size):
@@ -113,11 +118,14 @@ class Gui():
                 cover.move(i,move_size)
 
     def ac_clicked(self,id_):
+        self.last_row_clicked = False
         if self.COVER_CLICKED_ID == -1:
             self.ec = mmp_expanded_album.Expanded_Album(self,self.album_list[id_])
             self.ec.draw()
             self.move_size = self.ec.TOTAL_SIZE 
             self.move_covers(self.album_list[id_].y,1,self.move_size)
+            if self.album_list[id_].y == self.album_list[len(self.album_list)-1].y:
+                self.last_row_clicked = True
             self.adjust_scrolling()
             self.COVER_CLICKED_ID = id_
         else:
@@ -150,3 +158,6 @@ class Gui():
 
     def adjust_volume(self,change):
         self.main.adjust_volume(change)
+
+    def shuffle(self):
+        self.main.shuffle()

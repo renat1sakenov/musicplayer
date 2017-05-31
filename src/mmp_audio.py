@@ -13,6 +13,7 @@ class Audio():
     def __init__(self,control):
         self.control = control
         self.playing = None
+        self.calbum = None
         self.LOOP = False 
         self.PLAYING_NOW = False
         self.ALBUM_SELECTED = False
@@ -78,4 +79,12 @@ class Audio():
     def adjust_volume(self,change):
         if self.playing != None:
             self.playing.audio_set_volume(change)
+
+
+   def shuffle(self):
+       self.playlist.set_media_list(shuffle_album)
+
+
+   def set_playlist(self):
+       pass
        
